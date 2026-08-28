@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+    <meta charset="UTF-8">
+    <title>Register-page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="signin-body">
+<header class="main-header">
+    <div class="header-left">
+        <img src="logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="header-right">
+        <a href="mainpage.html"><button class="header-button">HOME</button></a>
+        <a href="AboutUs.html"><button class="header-button">ABOUT-US</button></a>
+    </div>
+</header>
+
+<div class="Signin-container">
+    <h1>SIGN-IN</h1>
+    <form id="registerForm">
+        <div class="form-row1">
+            <label for="firstname">ENTER FIRST NAME:</label>
+            <input type="text" id="firstname" placeholder="FirstName" required>
+        </div>
+        <div class="form-row2">
+            <label for="lastname">ENTER LAST NAME:</label>
+            <input type="text" id="lastname" placeholder="LastName" required>
+        </div>
+        <div class="form-row3">
+            <label for="email">ENTER EMAIL-ID:</label>
+            <input type="email" id="email" placeholder="Email-ID" required>
+        </div>
+        <div class="form-row4">
+            <label for="username">ENTER USERNAME:</label>
+            <input type="text" id="username" placeholder="Username" required>
+        </div>
+        <div class="form-row5">
+            <label for="password">ENTER PASSWORD:</label>
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <button type="submit">SIGN-UP</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', function(e){
+    e.preventDefault(); // Prevent actual form submission
+
+    // Get form values
+    const firstName = document.getElementById('firstname').value;
+    const lastName = document.getElementById('lastname').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Save user in localStorage (simulate database)
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    users.push({firstName,lastName,email,username,password});
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('Registration successful!');
+    window.location.href = 'login.html'; // Redirect to login page
+});
+</script>
+
+</body>
+</html>

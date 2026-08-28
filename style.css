@@ -1,0 +1,784 @@
+.html, body{
+    height: 100%;
+    margin: 0%;
+    padding: 0%;
+}
+
+.body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-image: url("hpg1.png");
+    background-size: contain;       /* image fits without zooming */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgb(245, 175, 186);      /* match the image background color */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+
+.start-btn {
+    padding: 10px 30px;
+    font-size: 20px;
+    border-radius: 8px;
+    background: white;
+    border-color: palevioletred;
+    cursor: pointer;
+    color: palevioletred;
+    font-weight: bold;
+}
+
+
+.mainpage-body {
+    background-image: url("HPG2.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.main-header {
+    background-color: rgb(248, 200, 209);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    height: 130px;
+    backdrop-filter: blur(8px);
+}
+
+.logo {
+    width: 130px;
+    height: auto;
+    justify-content: space-between;
+}
+
+.header-button {
+    height: 50px;
+    width: 120px;
+    background: white;
+    color: palevioletred;
+    border: dark rgb(238, 5, 83);
+    cursor: pointer;
+}
+
+.btn-center {
+    height: 50px;
+    width: 120px;
+    background: white;
+    color: palevioletred;
+    border: dark rgb(238, 5, 83);
+    cursor: pointer;
+}
+
+.center-buttons {
+    text-align: center;
+    margin-top: 470px;
+}
+
+.mp-button {
+    height:50px;
+    width:200px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    background: palevioletred;
+    color: white;
+    border: none;
+    font-weight: bolder;
+}
+
+.login-body {
+    background-image: url("infobg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.Login-container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 25px;
+    background: rgba(255, 182, 193, 0.35);  /* light pink + transparency */
+    backdrop-filter: blur(6px);              /* makes it look clean */
+    border-radius: 15px;
+}
+
+.Login-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.Login-container button {
+    background-color: white;
+    border-color: palevioletred;
+    height: 30px;
+    width: 325px;
+    color: rgb(250, 10, 90);
+    cursor: pointer;
+}
+
+.Login-container Label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+    color: rgb(216, 10, 79);
+}
+
+.Login-container h1 {
+    font-weight: bolder;
+    color: palevioletred;
+    text-align: center;
+}
+
+.signin-body {
+    background-image: url("infobg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.Signin-container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 25px;
+    background: rgba(255, 182, 193, 0.35);  /* light pink + transparency */
+    backdrop-filter: blur(6px);              /* makes it look clean */
+    border-radius: 15px;
+}
+
+.Signin-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.Signin-container button{
+    background-color: white;
+    border-color: palevioletred;
+    height: 30px;
+    width: 325px;
+    color: rgb(250, 10, 90);
+    cursor: pointer;
+}
+
+.Signin-container label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+    color: rgb(216, 10, 79);
+}
+
+.Signin-container h1 {
+    font-weight: bolder;
+    color: palevioletred;
+    text-align: center;
+}
+
+.Pwd-body {
+    background-image: url("infobg.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    padding: 0%;
+    margin: 0%;
+}
+
+.Pwd-container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 25px;
+    background: rgba(255, 182, 193, 0.35);  
+    backdrop-filter: blur(6px);              
+    border-radius: 15px;
+}
+
+.Pwd-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.Pwd-container button {
+    background-color: white;
+    border-color: palevioletred;
+    height: 30px;
+    width: 325px;
+    color: rgb(250, 10, 90);
+    cursor: pointer;
+}
+
+.Pwd-container Label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+    color: rgb(216, 10, 79);
+}
+
+.Pwd-container h1 {
+    font-weight: bolder;
+    color: palevioletred;
+    text-align: center;
+}
+
+.otp-input-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.otp-box {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.2s;
+  color: white;
+}
+
+
+.ResetPwd-body {
+    background-image: url("infobg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.ResetPwd-container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 25px;
+    background: rgba(255, 182, 193, 0.35);  
+    backdrop-filter: blur(6px);              
+    border-radius: 15px;
+}
+
+.ResetPwd-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.ResetPwd-container button {
+    background-color: white;
+    border-color: palevioletred;
+    height: 30px;
+    width: 325px;
+    color: rgb(250, 10, 90);
+    cursor: pointer;
+}
+
+.ResetPwd-container label{
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+    color: rgb(216, 10, 79);
+}
+
+.ResetPwd-container h1 {
+    font-weight: bolder;
+    color: palevioletred;
+    text-align: center;
+}
+
+.abt-body {
+    background-image: url("aboutbg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.label-abt{
+    font-weight: bolder;
+    color: rgb(203, 65, 111);
+    text-align: center;
+    margin-top: 70px;
+}
+
+.context-abt {
+    color: palevioletred;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.UserDash-body {
+    background-image: url("Dashboardbg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+
+.h1-btn {
+    font-weight: bolder;
+    color: white;
+    text-align: center;
+    margin-top: 100px;
+    margin-left: 300px;
+}
+
+.h1-btn {
+  display: flex;
+  gap: 30px; /* space between buttons */
+  margin: 10PX; /* space between rows */
+  display: flex;
+  flex-direction: row; /* stack rows vertically */
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+  min-height: 30vh;
+  font-weight: bolder;
+  font-size: larger;
+}
+
+/* Dashboard buttons */
+.options-button {
+  background: white;
+  border: 2px solid palevioletred;
+  color: rgb(250,10,90);
+  width: 325px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
+
+  justify-content: center;
+  margin-left: 135px;
+           
+}
+
+button:hover {
+  background: palevioletred;
+  color: white;
+}
+
+.Admin-Dash-body {
+    background-image: url("Dashboardbg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+} 
+
+.options1-button {
+  background: white;
+  border: 2px solid palevioletred;
+  color: rgb(250,10,90);
+  width: 325px;
+  height: 50px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: 0.3s;
+
+  justify-content: center;
+  margin-left: 300px;
+           
+}
+
+.profile-body {
+    background-image: url("Dashboardbg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.profile-container {
+  background: white;
+  border: 2px solid palevioletred;
+  border-radius: 10px;
+  width: 350px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: left;
+  margin-top: 150px;
+}
+
+.profile-container h2 {
+  text-align: center;
+  color: palevioletred;
+}
+
+.profile-field {
+  margin: 10px 0;
+  font-size: 16px;
+  color: palevioletred;
+}
+
+.profile-field label {
+  font-weight: bold;
+}
+
+.profile-container button {
+  margin-top: 20px;
+  width: 100%;
+  height: 35px;
+  background: palevioletred;
+  border: 2px solid palevioletred;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.profile-container button:hover {
+  background: palevioletred;
+  color: white;
+}
+
+.dummy-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    background-image: url("dummypage.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.search-sort {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.search-sort input, .search-sort select {
+    padding: 6px;
+    font-size: 14px;
+    margin-right: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.items-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.item-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    text-align: center;
+    width: calc(33% - 15px);
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.item-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.item-card h3 {
+    font-size: 14px;
+    margin: 5px 0 3px;
+}
+
+.item-card p {
+    font-size: 13px;
+    margin: 3px 0;
+    font-weight: bold;
+}
+
+.wishlist-btn, .cart-btn {
+    font-size: 16px;
+    border: none;
+    background: none;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.wishlist-btn:hover { color: red; }
+.cart-btn:hover { color: green; }
+
+@media (max-width: 900px) { .item-card { width: calc(50% - 15px); } }
+@media (max-width: 600px) { .item-card { width: 100%; } }
+
+.swap-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    background-image: url("favoritepg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+.swap-h1 {
+    font-weight: bolder;
+    font-size: larger;
+    margin-top: 80px;
+    color: rgb(252, 8, 89);
+    text-align: center;
+}
+
+.queue-actions {
+    display: flex;
+    flex-direction: column;   /* input on top, buttons under */
+    align-items: center;
+    gap: 20px;                /* reasonable spacing */
+    padding: 40px;
+    
+}
+
+.button-row {
+    display: flex;
+    gap: 20px;        /* spacing between the two buttons */
+}
+
+.button-row button {
+    padding: 10px 20px;
+    border: none;
+    background: #ff8fa3;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.button-row button:hover {
+    background: #ff6382;
+}
+
+.cart-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 10px;
+    background-image: url("favoritepg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+
+/* Mix & Match container layout */
+.mix-container {
+    display: flex;
+    justify-content: center;   /* centers horizontally */
+    align-items: flex-start;   /* aligns tops evenly */
+    gap: 50px;                 /* space between the two boxes */
+    margin-top: 40px;
+}
+
+/* Each item box */
+.selected-item, .recommended-item {
+    background: rgba(255, 255, 255, 0.6);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 300px;  /* same size for both */
+}
+
+/* Item card inside the boxes */
+.item-card img {
+    width: 200px;
+    border-radius: 10px;
+}
+
+.item-card h3 {
+    margin: 10px 0 5px;
+}
+
+.mixnmatch-body {
+    background-image: url("MixnMatch.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0%;
+    padding: 0%;
+}
+
+
+/*Calculator css */
+/* Calculator css */
+.calc-container {
+    width: 100%;
+    max-width: 450px;
+    margin: 50px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.input-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* center horizontally */
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.input-grid input {
+    width: 75%;              /* medium size */
+    padding: 14px;           /* taller */
+    font-size: 17px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.calc-btn {
+    margin-top: 15px;
+}
+
+.calc-btn button {
+    padding: 12px 22px;
+    font-size: 17px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ff6382;
+    border: 2px solid #ff6382;
+    background: white;
+}
+
+.results-box {
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+/* SWAP */
+
+/* Swap form container */
+.swap-form {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(6px);
+    border-radius: 15px;
+    padding: 25px;
+    width: 420px;
+    margin: 30px auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Labels */
+.swap-form label {
+    font-weight: bold;
+    color: rgb(216, 10, 79);
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* Inputs & selects */
+.swap-form input,
+.swap-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+/* Upload section */
+.upload-box {
+    border: 2px dashed palevioletred;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    background: rgba(255, 182, 193, 0.25);
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* Upload icon/text */
+.upload-box span {
+    display: block;
+    color: palevioletred;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Hide default file input */
+.upload-box input[type="file"] {
+    display: none;
+}
+
+/* Preview image */
+.preview-img {
+    margin-top: 12px;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid palevioletred;
+}
+
+/* Section divider titles */
+.swap-section-title {
+    font-weight: bolder;
+    color: rgb(252, 8, 89);
+    margin: 20px 0 10px;
+    text-align: center;
+}
+
+/* Submit button */
+.swap-submit-btn {
+    width: 100%;
+    height: 40px;
+    background: palevioletred;
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.swap-submit-btn:hover {
+    background: rgb(252, 8, 89);
+}
+

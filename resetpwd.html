@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="ResetPwd-body">
+    <header class="main-header">
+        <div class="header-left">
+            <img src="Logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="header-right">
+            <a href="mainpage.html">
+                <button class="header-button">HOME</button>
+            </a>
+            <a href="AboutUs.html">
+                <button class="header-button">ABOUT-US</button>
+            </a>
+        </div>
+    </div>
+    </header>
+
+
+    <div class="ResetPwd-container">
+        <h1>RESET PASSWORD</h1>
+        <form action="resetpwd" method="post">
+            <div class="form-row1">
+                <Label for="password" class="password">ENTER NEW PASSWORD:</Label>
+                <input type="text" name="new_password" placeholder="New Password" required>
+            </div>
+            <div class="form-row2">
+                <label for="password" class="password">CONFIRM NEW PASSWORD:</label>
+                <input type="text" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            <div class="form-row3">
+            <button class="submit-button">RESET PASSWORD</button> 
+            </div>
+        </form>
+    </div>
+</body>
+</html>

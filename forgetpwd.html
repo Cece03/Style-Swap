@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+    <meta charset="UTF-8">
+    <title>Forget Password</title>
+    <link rel="stylesheet" href= "style.css">
+</head>
+<body class="Pwd-body">
+    <header class="main-header">
+        <div class="header-left">
+            <img src="logo.png" alt="Logo" class="logo">
+        </div>
+        <div class="header-right">
+            <a href="mainpage.html">
+                <button class="header-button">HOME</button>
+            </a>
+            <a href="AboutUs.html">
+                <button class="header-button">ABOUT-US</button>
+            </a>
+        </div>
+    </header>
+
+        <div class="Pwd-container">
+            <h1>FORGET PASSWORD</h1>
+            <form action="forgetpwd" method="post">
+                <div class="form-row1">
+                    <Label for="email">ENTER EMAIL-ID:</Label>
+                    <input type="email" name="email" placeholder="Email-ID" required>
+                </div>
+                <div class="form-row2">
+                    <Label for="Number">ENTER PHONE NUMBER:</Label>
+                    <input type="text" name="phone" placeholder="Phone Number" required>
+                </div>
+                <div class="form-row3">
+                    <label for="OTP" class="OTP">ENTER RECEIVED OTP:</label>
+                    <div class="otp-input-container">
+                        <input type="text" name="otp1" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box">
+                        <input type="text" name="otp2" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box">
+                        <input type="text" name="otp3" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box">
+                        <input type="text" name="otp4" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box">
+                        <input type="text" name="otp5" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box">
+                        <input type="text" name="otp6" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="otp-box"> 
+                    </div>   
+                </div>
+                <div class="form-row4">
+                    <button type="submit" name="action" value="receive_otp" class="submit-button" >RECEIVE OTP</button>
+                </div>
+                <div class="form-row5">
+                <a href="  ">
+                    <button type="button" class="submit-button">RESET PASSWORD</button>
+                </a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

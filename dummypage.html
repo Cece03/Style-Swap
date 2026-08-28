@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clothing Items - BST Demo</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Arial, sans-serif; }
+  .main-header { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #f0f0f0; }
+  .header-button { margin: 0 5px; }
+  .items-container { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; }
+  .item-card { border: 1px solid #ccc; border-radius: 10px; padding: 10px; width: 180px; text-align: center; }
+  .item-card img { width: 100%; border-radius: 5px; }
+  .wishlist-btn, .mix-btn { margin: 5px; padding: 5px 10px; cursor: pointer; }
+</style>
+</head>
+<body class="dummy-body">
+
+<header class="main-header">
+  <div><img src="logo.png" class="logo" alt="Logo"></div>
+  <div>
+    <a href="mainpage.html"><button class="header-button">HOME</button></a>
+    <a href="wishcart.html"><button class="header-button">WISHLIST</button></a>
+  </div>
+</header>
+
+<h2 class="swap-h1">Clothing Items</h2>
+
+<div class="search-sort">
+  <input type="text" id="searchBar" placeholder="Search items by name or price...">
+  <select id="categorySelect">
+    <option value="">All Categories</option>
+    <option value="Traditional">Traditional Wear</option>
+    <option value="Shoes">Shoes</option>
+    <option value="Accessories">Accessories</option>
+    <option value="Tops">Tops</option>
+    <option value="Bottoms">Bottoms</option>
+    <option value="Jackets">Jackets</option>
+    <option value="Dresses">Dresses</option>
+  </select>
+  <select id="sortList">
+    <option value="">Sort By</option>
+    <option value="bubbleAsc">Bubble Sort: Price ↑</option>
+    <option value="selectionDesc">Selection Sort: Price ↓</option>
+    <option value="mergeAZ">Merge Sort: Name A→Z</option>
+  </select>
+  <button id="showPopularBtn">Most Popular Items</button>
+</div>
+
+<div class="items-container"></div>
+
+<script>
+// ================= ITEMS =================
+let items = [
+  {name:'Blue Shirt', category:'Tops', img:'images/Blueshirt.webp', price:2000, popularity:50},
+  {name:'Red Saree', category:'Traditional', img:'images/redsaree.webp', price:3200, popularity:80},
+  {name:'Black Jeans', category:'Bottoms', img:'images/Blackjeans.webp', price:1700, popularity:30},
+  {name:'Leather Jacket', category:'Jackets', img:'images/Leatherjacket.webp', price:5000, popularity:95},
+  {name:'Sports Shoes', category:'Shoes', img:'images/Sportshoes.webp', price:4000, popularity:70},
+  {name:'Green Shirt', category:'Tops', img:'images/Greenshirt.webp', price:1500, popularity:40},
+  {name:'White T-Shirt', category:'Tops', img:'images/Whiteshirt.webp', price:1200, popularity:20},
+  {name:'Grey Hoodie', category:'Jackets', img:'images/Greyhoodie.webp', price:2500, popularity:60},
+  {name:'Brown Boots', category:'Shoes', img:'images/Brownboots.webp', price:4500, popularity:55},
+  {name:'Black Cap', category:'Accessories', img:'images/Blackcap.webp', price:800, popularity:25},
+  {name:'Denim Jacket', category:'Jackets', img:'images/Denimjacket.webp', price:3800, popularity:65},
+  {name:'Yellow Skirt', category:'Bottoms', img:'images/Yellowskirt.webp', price:2200, popularity:35},
+  {name:'Pink Dress', category:'Dresses', img:'images/Pinkdress.webp', price:3000, popularity:75},
+  {name:'Black Sneakers', category:'Shoes', img:'images/Blacksneakers.webp', price:3500, popularity:60},
+  {name:'Black Belt', category:'Accessories', img:'images/Blackbelt.webp', price:900, popularity:15},
+  {name:'Blue Jeans', category:'Bottoms', img:'images/Bluejeans.webp', price:2000, popularity:45},
+  {name:'Green Hoodie', category:'Jackets', img:'images/Greenhoodie.webp', price:2700, popularity:50},
+  {name:'Red Heels', category:'Shoes', img:'images/Redheels.webp', price:4200, popularity:85},
+  {name:'Brown Bag', category:'Accessories', img:'images/Brownbag.webp', price:3200, popularity:70},
+  {name:'Grey Pants', category:'Bottoms', img:'images/Greypants.webp', price:2100, popularity:30},
+  {name:'Orange Jacket', category:'Jackets', img:'images/Orangejacket.webp', price:4800, popularity:90},
+  {name:'Purple T-Shirt', category:'Tops', img:'images/Purpletshirt.webp', price:1600, popularity:25},
+  {name:'Beige Shorts', category:'Bottoms', img:'images/Beigeshort.webp', price:1800, popularity:35},
+  {name:'Teal Skirt', category:'Bottoms', img:'images/Tealskirt.webp', price:2300, popularity:40},
+
+  {name:'Maroon Kurti', category:'Traditional', img:'images/Maroonkurti.webp', price:2800, popularity:68},
+  {name:'Floral Dress', category:'Dresses', img:'images/Floraldress.webp', price:3600, popularity:82},
+  {name:'Ankle Boots', category:'Shoes', img:'images/Ankleboots.webp', price:4600, popularity:77},
+  {name:'Silver Necklace', category:'Accessories', img:'images/Silvernecklace.webp', price:2500, popularity:55},
+  {name:'Printed Saree', category:'Traditional', img:'images/Printedsaree.webp', price:3400, popularity:72},
+  {name:'Crop Top', category:'Tops', img:'images/Croptop.webp', price:1400, popularity:48},
+  {name:'Pleated Skirt', category:'Bottoms', img:'images/Pleatedskirt.webp', price:2600, popularity:52},
+  {name:'Winter Coat', category:'Jackets', img:'images/Wintercoat.webp', price:6200, popularity:88},
+  {name:'Running Shoes', category:'Shoes', img:'images/Runningshoes.webp', price:3900, popularity:66},
+  {name:'Handbag', category:'Accessories', img:'images/Handbag.webp', price:4100, popularity:73},
+  {name:'Formal Blazer', category:'Jackets', img:'images/Formalblazer.webp', price:5500, popularity:80},
+  {name:'Off-Shoulder Top', category:'Tops', img:'images/Offshouldertop.webp', price:1900, popularity:60},
+  {name:'Palazzo Pants', category:'Bottoms', img:'images/Palazzopants.webp', price:2400, popularity:58},
+  {name:'Evening Gown', category:'Dresses', img:'images/Eveninggown.webp', price:7200, popularity:92},
+  {name:'Stud Earrings', category:'Accessories', img:'images/Studearrings.webp', price:1100, popularity:45},
+
+  {name:'Golden Saree', category:'Traditional', img:'images/Goldensaree.webp', price:5000, popularity:85},
+  {name:'Denim Shorts', category:'Bottoms', img:'images/Denimshorts.webp', price:1800, popularity:42},
+  {name:'Leather Sandals', category:'Shoes', img:'images/Leathersandals.webp', price:2700, popularity:60},
+  {name:'Pearl Bracelet', category:'Accessories', img:'images/Pearlbracelet.webp', price:1500, popularity:50},
+  {name:'Navy Blazer', category:'Jackets', img:'images/Navyblazer.webp', price:5300, popularity:78},
+  {name:'Red Crop Top', category:'Tops', img:'images/Redcroptop.webp', price:1600, popularity:55},
+  {name:'Florak Skirt', category:'Bottoms', img:'images/Florakskirt.webp', price:2200, popularity:48},
+  {name:'Cocktail Dress', category:'Dresses', img:'images/Cocktaildress.webp', price:6800, popularity:90},
+  {name:'Tan Boots', category:'Shoes', img:'images/Tanboots.webp', price:4200, popularity:67},
+  {name:'Chocker Necklace', category:'Accessories', img:'images/Chockernecklace.webp', price:1200, popularity:40}
+
+];
+
+
+// render updated items list
+render(items);
+
+
+
+// ================= RENDER =================
+function render(arr){
+  document.querySelector('.items-container').innerHTML = arr.map(i=>`
+    <div class="item-card">
+      <img src="${i.img}" alt="${i.name}">
+      <h3>${i.name}</h3>
+      <p>${i.price} Rs | Popularity: ${i.popularity}</p>
+      <button class="wishlist-btn" onclick="addToWishlist('${i.name}', '${i.img}', ${i.price})">❤️</button>
+      <button class="mix-btn" onclick="mixAndMatch('${i.name}', '${i.img}', ${i.price})">⭐</button>
+    </div>
+  `).join('');
+}
+
+// ================= WISHLIST =================
+let wishlistStack = JSON.parse(localStorage.getItem('wishlistStack')) || [];
+function addToWishlist(name,img,price){
+  let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+  if(!wishlist.some(i=>i.name===name)){
+    const item={name,img,price};
+    wishlist.push(item);
+    localStorage.setItem('wishlist',JSON.stringify(wishlist));
+    wishlistStack.push({action:'add',item});
+    localStorage.setItem('wishlistStack',JSON.stringify(wishlistStack));
+    alert("Added to wishlist ❤️");
+  }
+}
+
+// ================= MIX & MATCH =================
+function mixAndMatch(name,img,price){
+  const selectedItem={name,img,price};
+  let recommendedOptions=items.filter(i=>i.name!==name);
+  let recommended=recommendedOptions[Math.floor(Math.random()*recommendedOptions.length)];
+  localStorage.setItem('mixSelected',JSON.stringify(selectedItem));
+  localStorage.setItem('mixRecommended',JSON.stringify(recommended));
+  window.location.href='Mix&Match.html';
+}
+
+// ================= SORTING =================
+function bubbleSort(arr,key){for(let i=0;i<arr.length-1;i++)for(let j=0;j<arr.length-i-1;j++)if(arr[j][key]>arr[j+1][key])[arr[j],arr[j+1]]=[arr[j+1],arr[j]];return arr;}
+function selectionSort(arr,key){for(let i=0;i<arr.length-1;i++){let min=i;for(let j=i+1;j<arr.length;j++)if(arr[j][key]<arr[min][key])min=j;[arr[i],arr[min]]=[arr[min],arr[i]];}return arr;}
+function mergeSort(arr,key){if(arr.length<=1)return arr;const mid=Math.floor(arr.length/2);return merge(mergeSort(arr.slice(0,mid),key),mergeSort(arr.slice(mid),key),key);}
+function merge(l,r,key){let res=[];while(l.length&&r.length)res.push(l[0][key]<=r[0][key]?l.shift():r.shift());return res.concat(l,r);}
+document.getElementById('sortList').onchange=function(){
+  let arr=[...items];
+  if(this.value==='bubbleAsc') arr=bubbleSort(arr,'price');
+  if(this.value==='selectionDesc') arr=selectionSort(arr,'price').reverse();
+  if(this.value==='mergeAZ') arr=mergeSort(arr,'name');
+  render(arr);
+};
+
+// ================= POPULAR ITEMS =================
+function heapify(arr,n,i){
+  let largest=i,l=2*i+1,r=2*i+2;
+  if(l<n&&arr[l].popularity>arr[largest].popularity)largest=l;
+  if(r<n&&arr[r].popularity>arr[largest].popularity)largest=r;
+  if(largest!==i){[arr[i],arr[largest]]=[arr[largest],arr[i]];heapify(arr,n,largest);}
+}
+function heapSort(arr){
+  let n=arr.length;
+  for(let i=Math.floor(n/2)-1;i>=0;i--)heapify(arr,n,i);
+  for(let i=n-1;i>0;i--){[arr[0],arr[i]]=[arr[i],arr[0]];heapify(arr,i,0);}
+  return arr.reverse();
+}
+document.getElementById('showPopularBtn').onclick=()=>{ render(heapSort([...items])); };
+
+// ================= BST FOR PRICE SEARCH =================
+class BSTNode { constructor(item){ this.item=item; this.left=null; this.right=null; } }
+class BST {
+  constructor(){ this.root=null; }
+  insert(item){
+    const node=new BSTNode(item);
+    if(!this.root){ this.root=node; return; }
+    let current=this.root;
+    while(true){
+      if(item.price<current.item.price){
+        if(!current.left){ current.left=node; break; } else current=current.left;
+      } else {
+        if(!current.right){ current.right=node; break; } else current=current.right;
+      }
+    }
+  }
+  inOrder(node=this.root, arr=[]){
+    if(!node) return arr;
+    this.inOrder(node.left, arr);
+    arr.push(node.item);
+    this.inOrder(node.right, arr);
+    return arr;
+  }
+  closestN(price, N=3, category=''){
+    const sortedItems = this.inOrder()
+      .filter(i => !category || i.category === category)
+      .sort((a,b)=>Math.abs(a.price-price)-Math.abs(b.price-price));
+    return sortedItems.slice(0,N);
+  }
+}
+const bst=new BST();
+items.forEach(i=>bst.insert(i));
+
+// ================= SEARCH =================
+function searchItems(){
+  const val=document.getElementById('searchBar').value.trim();
+  const cat=document.getElementById('categorySelect').value;
+  if(!val){ 
+    render(cat ? items.filter(i=>i.category===cat) : items); 
+    return; 
+  }
+
+  let results=[];
+  const num=Number(val);
+  if(!isNaN(num)){ 
+    results=bst.closestN(num,5,cat);
+  } else {
+    results=items.filter(i=>i.name.toLowerCase().includes(val.toLowerCase()));
+    if(cat) results=results.filter(i=>i.category===cat);
+  }
+  render(results);
+}
+document.getElementById('searchBar').oninput=searchItems;
+document.getElementById('categorySelect').onchange=searchItems;
+
+// ================= INITIAL RENDER =================
+render(items);
+</script>
+
+</body>
+</html>

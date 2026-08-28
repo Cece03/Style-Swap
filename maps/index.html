@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Map – Shortest Path</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+<style>
+  body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+  }
+
+  #map {
+    height: 85vh;
+    width: 90%;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 12px;
+  }
+
+  /* Top info bar */
+  #routeInfo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    z-index: 1000;
+  }
+
+  /* Pink lollipop marker */
+  .lollipop {
+    background: hotpink;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 8px rgba(255,105,180,0.9);
+  }
+</style>
+</head>
+
+<body>
+
+<div id="routeInfo"></div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+
+//// ------------------ GET START & END FROM URL ------------------
+
+function getQueryParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(param);
+}
+
+const startLocation = getQueryParam("start");
+const endLocation   = getQueryParam("end");
+
+if (!startLocation || !endLocation) {
+    alert("Start or End location missing!");
+    throw new Error("Missing start/end");
+}
+
+//// ------------------ MAP INITIALIZATION ------------------
+
+const map = L.map('map').setView([19.0760, 72.8777], 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+}).addTo(map);
+
+//// ------------------ DELIVERY LOCATIONS (20+) ------------------
+
+const nodes = {
+    "Warehouse": [19.0760, 72.8777],
+    "Dadar": [19.0180, 72.8486],
+    "Bandra": [19.0544, 72.8408],
+    "Andheri": [19.1190, 72.8460],
+    "Kurla": [19.0650, 72.8795],
+    "Ghatkopar": [19.0856, 72.9081],
+    "Chembur": [19.0625, 72.8981],
+    "Mulund": [19.1726, 72.9425],
+    "Powai": [19.1176, 72.9060],
+    "Vikhroli": [19.1110, 72.9340],
+    "Sion": [19.0400, 72.8640],
+    "Wadala": [19.0176, 72.8570],
+    "Lower Parel": [18.9977, 72.8376],
+    "Malad": [19.1873, 72.8484],
+    "Goregaon": [19.1663, 72.8526],
+    "Jogeshwari": [19.1366, 72.8470],
+    "Santacruz": [19.0800, 72.8416],
+    "Vile Parle": [19.0968, 72.8517],
+    "Matunga": [19.0269, 72.8553],
+    "Kandivali": [19.2047, 72.8510]
+};
+
+//// ------------------ GRAPH (ADJACENCY LIST) ------------------
+
+const graph = {
+    "Warehouse": [["Dadar", 6], ["Kurla", 7]],
+    "Dadar": [["Warehouse", 6], ["Bandra", 5], ["Matunga", 2]],
+    "Bandra": [["Dadar", 5], ["Santacruz", 2]],
+    "Santacruz": [["Bandra", 2], ["Vile Parle", 2]],
+    "Vile Parle": [["Santacruz", 2], ["Andheri", 3]],
+    "Andheri": [["Vile Parle", 3], ["Jogeshwari", 2], ["Powai", 4]],
+    "Jogeshwari": [["Andheri", 2], ["Goregaon", 3]],
+    "Goregaon": [["Jogeshwari", 3], ["Malad", 2]],
+    "Malad": [["Goregaon", 2], ["Kandivali", 3]],
+    "Kandivali": [["Malad", 3]],
+    "Matunga": [["Dadar", 2], ["Sion", 2]],
+    "Sion": [["Matunga", 2], ["Chembur", 3]],
+    "Chembur": [["Sion", 3], ["Kurla", 2]],
+    "Kurla": [["Chembur", 2], ["Ghatkopar", 3], ["Warehouse", 7]],
+    "Ghatkopar": [["Kurla", 3], ["Vikhroli", 2]],
+    "Vikhroli": [["Ghatkopar", 2], ["Powai", 3]],
+    "Powai": [["Vikhroli", 3], ["Andheri", 4], ["Mulund", 4]],
+    "Mulund": [["Powai", 4]]
+};
+
+//// ------------------ VALIDATION ------------------
+
+if (!nodes[startLocation] || !nodes[endLocation]) {
+    alert("Invalid location entered!");
+    throw new Error("Invalid location");
+}
+
+//// ------------------ DIJKSTRA ALGORITHM (UNCHANGED) ------------------
+
+function dijkstra(graph, start, end) {
+    const distances = {};
+    const previous = {};
+    const visited = new Set();
+
+    for (let node in graph) {
+        distances[node] = Infinity;
+        previous[node] = null;
+    }
+
+    distances[start] = 0;
+
+    while (true) {
+        let current = null;
+        let minDistance = Infinity;
+
+        for (let node in distances) {
+            if (!visited.has(node) && distances[node] < minDistance) {
+                minDistance = distances[node];
+                current = node;
+            }
+        }
+
+        if (current === null) break;
+        if (current === end) break;
+
+        visited.add(current);
+
+        for (let [neighbor, weight] of graph[current]) {
+            const alt = distances[current] + weight;
+            if (alt < distances[neighbor]) {
+                distances[neighbor] = alt;
+                previous[neighbor] = current;
+            }
+        }
+    }
+
+    const path = [];
+    let temp = end;
+    while (temp) {
+        path.unshift(temp);
+        temp = previous[temp];
+    }
+
+    return { path, distance: distances[end] };
+}
+
+//// ------------------ DISPLAY ALL DELIVERY POINTS ------------------
+
+for (let place in nodes) {
+    L.circleMarker(nodes[place], {
+        radius: 4,
+        color: "#aaa"
+    }).addTo(map).bindPopup(place);
+}
+
+//// ------------------ FIND & DRAW SHORTEST PATH ------------------
+
+const result = dijkstra(graph, startLocation, endLocation);
+const shortestPath = result.path;
+const totalDistance = result.distance;
+
+const routeCoords = shortestPath.map(p => nodes[p]);
+
+L.polyline(routeCoords, {
+    color: "white",
+    weight: 6,
+    opacity: 0.9
+}).addTo(map);
+
+//// ------------------ START & END PINK MARKERS ------------------
+
+const pinkIcon = L.divIcon({
+    className: 'lollipop',
+    iconSize: [18,18]
+});
+
+L.marker(nodes[startLocation], { icon: pinkIcon })
+ .addTo(map)
+ .bindTooltip(`Start: ${startLocation}`, { permanent: true, direction: 'top' });
+
+L.marker(nodes[endLocation], { icon: pinkIcon })
+ .addTo(map)
+ .bindTooltip(`End: ${endLocation}`, { permanent: true, direction: 'top' });
+
+//// ------------------ TOP DISPLAY INFO ------------------
+
+document.getElementById("routeInfo").innerHTML =
+ `<b>${startLocation}</b> → <b>${endLocation}</b><br>
+  Shortest Distance: <b>${totalDistance.toFixed(2)} km</b>`;
+
+//// ------------------ BFS & DFS FUNCTIONS ------------------
+
+function bfs(start) {
+    const queue = [start];
+    const visited = new Set([start]);
+    const order = [];
+
+    while (queue.length) {
+        const node = queue.shift();
+        order.push(node);
+        if (graph[node]) {
+            for (const [neighbor] of graph[node]) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    queue.push(neighbor);
+                }
+            }
+        }
+    }
+    return order;
+}
+
+function dfs(start) {
+    const stack = [start];
+    const visited = new Set();
+    const order = [];
+
+    while (stack.length) {
+        const node = stack.pop();
+        if (!visited.has(node)) {
+            visited.add(node);
+            order.push(node);
+            if (graph[node]) {
+                for (let i = graph[node].length - 1; i >= 0; i--) {
+                    const neighbor = graph[node][i][0];
+                    if (!visited.has(neighbor)) stack.push(neighbor);
+                }
+            }
+        }
+    }
+    return order;
+}
+
+// Display BFS & DFS order in routeInfo
+const bfsOrder = bfs(startLocation);
+const dfsOrder = dfs(startLocation);
+document.getElementById("routeInfo").innerHTML += `<br>BFS Order: ${bfsOrder.join(" → ")}<br>DFS Order: ${dfsOrder.join(" → ")}`;
+
+</script>
+</body>
+</html>

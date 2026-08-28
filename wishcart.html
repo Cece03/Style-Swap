@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+<meta charset="UTF-8">
+<title>Clothing Wishlist & DSA Demo</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Arial, sans-serif; }
+  .main-header { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #ed99b6; }
+  .header-button { margin: 0 5px; }
+  .wishlist-item { margin: 5px 0; padding: 5px; border-bottom: 1px solid #ddd; display: flex; align-items: center; }
+  .wishlist-item img { margin-right: 10px; }
+  .dsa-demo { margin-top: 30px; padding: 10px; border: 1px solid #ccc; background: #fafafa; }
+  .dsa-demo button { margin: 5px; padding: 5px 10px; }
+</style>
+</head>
+<body class="cart-body">
+
+<!-- Header -->
+<header class="main-header">
+  <div class="header-left"><img src="logo.png" class="logo"></div>
+  <div class="header-right">
+    <a href="mainpage.html"><button class="header-button">HOME</button></a>
+    <a href="Mix&Match.html"><button class="header-button">MIXnMATCH</button></a>
+    <a href="userdash.html"><button class="header-button">USER-PAGE</button></a>
+  </div>
+</header>
+
+<h1 class="swap-h1">WISHLIST</h1>
+
+<div id="wishlist" class="section-container"></div>
+
+<h2>DSA Sorting Demo (Wishlist)</h2>
+<div class="dsa-demo">
+  <button onclick="sortByPrice()">Insertion Sort → Price ↑</button>
+  <button onclick="sortByPopularity()">Quick Sort → Popularity ↓</button>
+  <button onclick="sortByName()">Shell Sort → Name A→Z</button>
+</div>
+
+<h2>DSA Structures Demo</h2>
+<div class="dsa-demo">
+  <button onclick="linkedListTraversal()">Linked List Traversal</button>
+  <button onclick="enqueueQueue()">Enqueue to Queue</button>
+  <button onclick="dequeueQueue()">Dequeue from Queue</button>
+  <button onclick="binarySearchDemo()">Binary Search (by Price)</button>
+</div>
+
+<script>
+// ---------- Wishlist Array ----------
+let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+function renderWishlist(arr){
+    const div = document.getElementById('wishlist');
+    if(arr.length === 0){
+        div.innerHTML = "<p>No items in wishlist yet.</p>";
+        return;
+    }
+    div.innerHTML = arr.map(i=>`
+        <div class="wishlist-item">
+            <img src="${i.img}" width="50"> ${i.name} - ${i.price}Rs | Popularity: ${i.popularity}
+            <button onclick="removeWishlist('${i.name}')">Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeWishlist(name){
+    wishlist = wishlist.filter(i=>i.name!==name);
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    renderWishlist(wishlist);
+    // Update LinkedList and Queue
+    wishlistLinkedList = new LinkedList();
+    wishlist.forEach(item => wishlistLinkedList.append(item));
+    wishlistQueue = new Queue();
+    wishlist.forEach(item => wishlistQueue.enqueue(item));
+}
+
+renderWishlist(wishlist);
+
+// ---------- Sorting Algorithms ----------
+
+// Insertion Sort → Price Ascending
+function sortByPrice(){
+    let arr = [...wishlist];
+    for(let i=1;i<arr.length;i++){
+        let key = arr[i];
+        let j = i-1;
+        while(j>=0 && arr[j].price > key.price){
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j+1] = key;
+    }
+    renderWishlist(arr);
+}
+
+// Quick Sort → Popularity Descending
+function quickSort(arr){
+    if(arr.length <= 1) return arr;
+    let pivot = arr[arr.length-1];
+    let left = [], right = [];
+    for(let i=0;i<arr.length-1;i++){
+        if(arr[i].popularity > pivot.popularity) left.push(arr[i]);
+        else right.push(arr[i]);
+    }
+    return [...quickSort(left), pivot, ...quickSort(right)];
+}
+
+function sortByPopularity(){
+    let sorted = quickSort([...wishlist]);
+    renderWishlist(sorted);
+}
+
+// Shell Sort → Name A→Z
+function sortByName(){
+    let arr = [...wishlist];
+    let n = arr.length;
+    let gap = Math.floor(n/2);
+    while(gap > 0){
+        for(let i=gap;i<n;i++){
+            let temp = arr[i];
+            let j = i;
+            while(j>=gap && arr[j-gap].name.toLowerCase() > temp.name.toLowerCase()){
+                arr[j] = arr[j-gap];
+                j -= gap;
+            }
+            arr[j] = temp;
+        }
+        gap = Math.floor(gap/2);
+    }
+    renderWishlist(arr);
+}
+
+// ---------- Linked List Implementation ----------
+class Node {
+    constructor(data){
+        this.data = data;
+        this.next = null;
+    }
+}
+class LinkedList {
+    constructor(){
+        this.head = null;
+    }
+    append(data){
+        const node = new Node(data);
+        if(!this.head){
+            this.head = node;
+        } else {
+            let current = this.head;
+            while(current.next) current = current.next;
+            current.next = node;
+        }
+    }
+    traverse(){
+        let current = this.head;
+        let items = [];
+        while(current){
+            items.push(current.data.name + " (Price: " + current.data.price + ")");
+            current = current.next;
+        }
+        alert("Linked List: \n" + items.join("\n"));
+    }
+}
+
+// ---------- Queue Implementation ----------
+class QueueNode {
+    constructor(data){
+        this.data = data;
+        this.next = null;
+    }
+}
+class Queue {
+    constructor(){
+        this.front = null;
+        this.rear = null;
+    }
+    enqueue(data){
+        const node = new QueueNode(data);
+        if(!this.rear){
+            this.front = this.rear = node;
+        } else {
+            this.rear.next = node;
+            this.rear = node;
+        }
+    }
+    dequeue(){
+        if(!this.front) return null;
+        const temp = this.front;
+        this.front = this.front.next;
+        if(!this.front) this.rear = null;
+        return temp.data;
+    }
+    traverse(){
+        let current = this.front;
+        let items = [];
+        while(current){
+            items.push(current.data.name + " (Price: " + current.data.price + ")");
+            current = current.next;
+        }
+        alert("Queue: \n" + items.join("\n"));
+    }
+}
+
+// ---------- Binary Search ----------
+function binarySearch(arr, target){
+    let low=0, high=arr.length-1;
+    while(low<=high){
+        let mid = Math.floor((low+high)/2);
+        if(arr[mid].price === target) return arr[mid];
+        else if(arr[mid].price < target) low = mid+1;
+        else high = mid-1;
+    }
+    return null;
+}
+
+// ---------- Demo functions ----------
+let wishlistLinkedList = new LinkedList();
+wishlist.forEach(item => wishlistLinkedList.append(item));
+
+let wishlistQueue = new Queue();
+wishlist.forEach(item => wishlistQueue.enqueue(item));
+
+function linkedListTraversal(){
+    wishlistLinkedList.traverse();
+}
+
+function enqueueQueue(){
+    let item = wishlist[0];
+    if(item){
+        wishlistQueue.enqueue(item);
+        alert(item.name + " added to queue");
+    }
+}
+
+function dequeueQueue(){
+    let item = wishlistQueue.dequeue();
+    if(item){
+        alert(item.name + " removed from queue");
+    } else {
+        alert("Queue is empty");
+    }
+}
+
+function binarySearchDemo(){
+    if(wishlist.length === 0){ alert("Wishlist empty"); return; }
+    let sorted = [...wishlist].sort((a,b)=>a.price-b.price);
+    let price = parseInt(prompt("Enter price to search:"));
+    if(isNaN(price)) return;
+    let result = binarySearch(sorted, price);
+    if(result) alert("Found: " + result.name + " (Price: " + result.price + ")");
+    else alert("No item found with that price");
+}
+</script>
+
+</body>
+</html>

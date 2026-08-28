@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleSwap – Swap History</title>
+
+<!-- LINK YOUR MAIN CSS -->
+<link rel="stylesheet" href="style.css">
+
+<style>
+/* extra page-specific fixes */
+.swap-page {
+  padding-top: 150px;
+}
+.section {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 15px;
+  padding: 25px;
+  margin: 30px auto;
+  width: 85%;
+  max-width: 1000px;
+}
+.items-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  text-align: center;
+}
+.preview {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.swap-arrow {
+  font-size: 22px;
+  margin: 8px 0;
+}
+.process {
+  background: rgba(255,182,193,0.4);
+  padding: 15px;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body class="swap-body">
+
+<header class="main-header">
+  <img src="Logo.png" class="logo">
+</header>
+
+<div class="swap-page">
+
+<h1 class="swap-h1">Swap History & Processing</h1>
+
+<!-- FORM -->
+<div class="swap-form">
+
+<h3 class="swap-section-title">Participant 1</h3>
+
+<label>Name</label>
+<input id="u1">
+
+<label>Outfit Name</label>
+<input id="i1">
+
+<label>Price (₹)</label>
+<input id="p1" type="number">
+
+<div class="upload-box" onclick="document.getElementById('imgInput1').click()">
+  Upload / Capture Outfit
+  <span>📷 Camera or Gallery</span>
+  <input type="file" id="imgInput1" accept="image/*" capture="environment" onchange="preview(event,'img1')">
+</div>
+<img id="img1" class="preview-img" style="display:none;">
+
+<label>Payment Source</label>
+<select id="s1">
+  <option value="">Select</option>
+  <option>UPI</option>
+  <option>Card</option>
+  <option>Cash</option>
+</select>
+
+<label>Delivery Location</label>
+<input id="l1">
+
+<hr>
+
+<h3 class="swap-section-title">Participant 2</h3>
+
+<label>Name</label>
+<input id="u2">
+
+<label>Outfit Name</label>
+<input id="i2">
+
+<label>Price (₹)</label>
+<input id="p2" type="number">
+
+<div class="upload-box" onclick="document.getElementById('imgInput2').click()">
+  Upload / Capture Outfit
+  <span>📷 Camera or Gallery</span>
+  <input type="file" id="imgInput2" accept="image/*" capture="environment" onchange="preview(event,'img2')">
+</div>
+<img id="img2" class="preview-img" style="display:none;">
+
+<label>Payment Source</label>
+<select id="s2">
+  <option value="">Select</option>
+  <option>UPI</option>
+  <option>Card</option>
+  <option>Cash</option>
+</select>
+
+<label>Bank Details (Receiver)</label>
+<input id="bank">
+
+<label>Pickup Location</label>
+<input id="pickup">
+
+<button class="swap-submit-btn" onclick="addSwap()">Add to Queue</button>
+<button class="swap-submit-btn" style="margin-top:10px;" onclick="processSwap()">Process Swap</button>
+
+<p style="text-align:center;font-weight:bold;color:palevioletred;">
+Daily Limit: 3 (Circular Queue)
+</p>
+</div>
+
+<!-- QUEUE -->
+<div class="section">
+<h2>Pending Swaps (Queue)</h2>
+<div id="queue" class="items-container"></div>
+</div>
+
+<!-- PROCESS -->
+<div class="section">
+<h2>Swap Process</h2>
+<div id="status" class="process"></div>
+</div>
+
+
+<div class="section">
+  <h2>Swap Cost Calculator (Postfix Evaluation)</h2>
+  <div style="text-align:center; margin-top:20px;">
+    <label>Price of User 1's Outfit:</label><br>
+    <input type="number" id="price1" placeholder="Enter price" style="padding:8px; width:200px;"><br><br>
+
+    <label>Price of User 2's Outfit:</label><br>
+    <input type="number" id="price2" placeholder="Enter price" style="padding:8px; width:200px;"><br><br>
+
+    <button onclick="calculateDifference()" style="padding:10px 25px; font-size:16px; cursor:pointer;">
+      Calculate Price Difference
+    </button>
+    <p id="postfixExpr" style="margin-top:15px; font-weight:bold;"></p>
+    <p id="finalAmount" style="margin-top:5px; font-weight:bold; color:green;"></p>
+  </div>
+</div>
+
+<script>
+// ---- Postfix Evaluation using Stack ----
+function calculateDifference() {
+  const p1 = parseFloat(document.getElementById('price1').value);
+  const p2 = parseFloat(document.getElementById('price2').value);
+
+  if (isNaN(p1) || isNaN(p2)) {
+    alert("Please enter valid prices for both users");
+    return;
+  }
+
+  // ---- Create Postfix Expression ----
+  const postfix = `${p1} ${p2} -`; // simple difference
+  document.getElementById('postfixExpr').innerText = "Postfix Expression: " + postfix;
+
+  // ---- Evaluate Postfix ----
+  const stack = [];
+  const tokens = postfix.split(" ");
+  tokens.forEach(token => {
+    if (!isNaN(token)) {
+      stack.push(parseFloat(token));
+    } else {
+      const b = stack.pop();
+      const a = stack.pop();
+      if (token === "+") stack.push(a + b);
+      else if (token === "-") stack.push(a - b);
+      else if (token === "*") stack.push(a * b);
+      else if (token === "/") stack.push(a / b);
+    }
+  });
+
+  const result = stack.pop();
+  document.getElementById('finalAmount').innerText = "Final Amount to Pay: ₹" + result;
+}
+</script>
+
+
+
+
+<!-- DELIVERY GUY SECTION -->
+
+<div class="section">
+  <h2>Delivery Guy – Find Shortest Path</h2>
+
+  <div style="text-align:center; margin-top:20px;">
+    <label>Start Location:</label><br>
+    <input type="text" id="startLocation"
+           placeholder="Enter start location"
+           style="padding:8px; width:220px;">
+    <br><br>
+
+    <label>End Location:</label><br>
+    <input type="text" id="endLocation"
+           placeholder="Enter end location"
+           style="padding:8px; width:220px;">
+    <br><br>
+
+    <button
+      style="padding:10px 25px; font-size:16px; cursor:pointer;"
+      onclick="
+        const start = document.getElementById('startLocation').value.trim();
+        const end   = document.getElementById('endLocation').value.trim();
+
+        if (!start || !end) {
+          alert('Please enter both start and end locations');
+          return;
+        }
+
+        const url = `maps/index.html?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}`;
+        window.open(url, '_blank');
+      "
+    >
+      Find Shortest Path
+    </button>
+  </div>
+</div>
+
+
+
+<!-- HISTORY -->
+<div class="section">
+<h2>Completed Swaps (Binary Tree)</h2>
+<div id="history" class="items-container"></div>
+</div>
+
+</div>
+
+<script>
+/* Circular Queue */
+let queue = [];
+const MAX = 3;
+
+/* Binary Tree */
+class Node{
+  constructor(s){ this.s=s; this.l=null; this.r=null; }
+}
+class BinaryTree{
+  constructor(){ this.root=null; }
+  insert(s){
+    const n=new Node(s);
+    if(!this.root) this.root=n;
+    else this._i(this.root,n);
+  }
+  _i(r,n){
+    if(n.s.diff < r.s.diff){
+      r.l ? this._i(r.l,n) : r.l=n;
+    } else {
+      r.r ? this._i(r.r,n) : r.r=n;
+    }
+  }
+  inorder(r,a){
+    if(!r) return;
+    this.inorder(r.l,a);
+    a.push(r.s);
+    this.inorder(r.r,a);
+  }
+}
+let tree=new BinaryTree();
+
+
+/* ================= STACK USING LINKED LIST (ADS) ================= */
+class StackNode {
+  constructor(data){
+    this.data = data;
+    this.next = null;
+  }
+}
+class LinkedStack {
+  constructor(){
+    this.top = null;
+  }
+  push(data){
+    const node = new StackNode(data);
+    node.next = this.top;
+    this.top = node;
+  }
+  pop(){
+    if(!this.top) return null;
+    const temp = this.top;
+    this.top = this.top.next;
+    return temp.data;
+  }
+}
+const processedStack = new LinkedStack();
+/* ================================================================ */
+
+
+/* Image Preview */
+function preview(e,id){
+  const img=document.getElementById(id);
+  img.src=URL.createObjectURL(e.target.files[0]);
+  img.style.display="block";
+}
+
+/* Add Swap */
+function addSwap(){
+  const u1v=u1.value,i1v=i1.value,p1v=+p1.value,l1v=l1.value,s1v=s1.value;
+  const u2v=u2.value,i2v=i2.value,p2v=+p2.value,l2v=pickup.value,s2v=s2.value;
+  const b=bank.value;
+  const imgA=img1.src,imgB=img2.src;
+
+  if(!u1v||!u2v||!i1v||!i2v||!p1v||!p2v||!l1v||!l2v||!s1v||!s2v||!b||!imgA||!imgB){
+    alert("Fill all fields");
+    return;
+  }
+
+  if(queue.length>=MAX){
+    alert("Daily limit reached");
+    return;
+  }
+
+  let A,B;
+  if(p1v<=p2v){
+    A={u:u1v,p:p1v,img:imgA};
+    B={u:u2v,p:p2v,img:imgB};
+  }else{
+    A={u:u2v,p:p2v,img:imgB};
+    B={u:u1v,p:p1v,img:imgA};
+  }
+
+  queue.push({A,B,diff:Math.abs(B.p-A.p)});
+  renderQueue();
+}
+
+/* Render Queue */
+function renderQueue(){
+  queueDiv.innerHTML="";
+  queue.forEach((s,i)=>{
+    queueDiv.innerHTML+=`
+    <div class="card">
+      <img src="${s.A.img}" class="preview">
+      ${s.A.u} (₹${s.A.p})
+      <div class="swap-arrow">🔄</div>
+      <img src="${s.B.img}" class="preview">
+      ${s.B.u} (₹${s.B.p})
+      <b>Diff: ₹${s.diff}</b>
+    </div>`;
+  });
+}
+
+/* Process Swap */
+function processSwap(){
+  if(!queue.length){ alert("Queue empty"); return; }
+  const s=queue.shift();
+  status.innerHTML=`
+    Lower price user pays 50% difference<br>
+    Higher price user ships item<br>
+    Remaining 50% paid<br>
+    Delivery completed ✅
+  `;
+  tree.insert(s);
+  renderQueue();
+  renderHistory();
+}
+
+/* History */
+function renderHistory(){
+  history.innerHTML="";
+  let a=[];
+  tree.inorder(tree.root,a);
+  a.forEach(s=>{
+    history.innerHTML+=`
+    <div class="card">
+      <img src="${s.A.img}" class="preview">
+      <img src="${s.B.img}" class="preview">
+      ₹${s.diff}
+    </div>`;
+  });
+}
+
+const queueDiv=document.getElementById("queue");
+const status=document.getElementById("status");
+const history=document.getElementById("history");
+</script>
+
+</body>
+</html>

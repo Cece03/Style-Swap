@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+<meta charset="UTF-8">
+<title>Mix & Match</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="mixnmatch-body">
+
+<header class="main-header">
+  <div class="header-left"><img src="logo.png" class="logo"></div>
+  <div class="header-right">
+    <a href="mainpage.html"><button class="header-button">HOME</button></a>
+    <a href="userdash.html"><button class="header-button">USER-PAGE</button></a>
+  </div>
+</header>
+
+<h1 class="swap-h1">MIX & MATCH</h1>
+
+<div class="mix-container">
+  <div class="selected-item">
+    <h2>Your Selected Item</h2>
+    <div class="item-wrapper"></div>
+  </div>
+  <div class="recommended-item">
+    <h2>Recommended Item</h2>
+    <div class="item-wrapper"></div>
+  </div>
+</div>
+
+<script>
+// Node & Linked List
+class Node{constructor(item){this.item=item;this.next=null;this.prev=null;}}
+class LinkedList{
+  constructor(){this.head=this.tail=null;}
+  add(item){const n=new Node(item);if(!this.head)this.head=this.tail=n;else{this.tail.next=n;n.prev=this.tail;this.tail=n;}}
+  getLast(){return this.tail?this.tail.item:null;}
+  getRandomExcept(excludeName){
+    let arr=[],c=this.head;
+    while(c){if(c.item.name!==excludeName) arr.push(c.item); c=c.next;}
+    return arr.length?arr[Math.floor(Math.random()*arr.length)]:null;
+  }
+}
+
+// Load list from storage
+let list=new LinkedList();
+const saved=JSON.parse(localStorage.getItem('mixList'))||[];
+saved.forEach(i=>list.add(i));
+
+// Add current selected
+const selected=JSON.parse(localStorage.getItem('mixSelected'));
+if(selected){list.add(selected);localStorage.setItem('mixList',JSON.stringify([...traverse(list)]));}
+
+// Traverse list to array
+function traverse(l){let a=[],c=l.head;while(c){a.push(c.item);c=c.next;}return a;}
+
+// Render item
+function render(container,item){if(item)container.innerHTML=`<div class="item-card"><img src="${item.img}" alt="${item.name}" style="width:200px;"><h3>${item.name}</h3><p>${item.price} Rs</p></div>`;}
+
+// Show selected & recommended
+render(document.querySelector('.selected-item .item-wrapper'),list.getLast());
+render(document.querySelector('.recommended-item .item-wrapper'),list.getRandomExcept(list.getLast().name));
+</script>
+
+
+</body>
+</html>

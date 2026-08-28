@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator with DSA Features</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Arial, sans-serif; }
+  .calc-container, .tips-box, .recent-calc { max-width: 500px; margin: 20px auto; padding: 15px; border-radius: 10px; background-color: #f9f9f9; border: 1px solid #ccc; }
+  .calc-container input { width: 100%; margin-bottom: 10px; padding: 5px; }
+  .calc-container button, .tips-box button { margin-top: 10px; padding: 8px 15px; }
+  .recent-calc ul { padding-left: 20px; }
+</style>
+</head>
+<body class="mixnmatch-body">
+
+<header class="main-header">
+  <div>
+    <img src="logo.png" alt="Logo" class="logo">
+  </div>
+  <div class="header-right">
+    <a href="mainpage.html"><button class="header-button">HOME</button></a>
+    <a href="userdash.html"><button class="header-button">USERPAGE</button></a>
+  </div>
+</header>
+
+<div class="calc-container">
+    <h1 class="swap-h1">Body Measurement Formula Helper</h1>
+
+    <div class="input-grid">
+        <label for="m1">Enter waist size:</label>
+        <input type="number" id="m1">
+
+        <label for="m2">Enter hip size:</label>
+        <input type="number" id="m2">
+
+        <label for="m3">Enter bust size:</label>
+        <input type="number" id="m3">
+    </div>
+
+    <button onclick="calc()">Calculate</button>
+    <button onclick="undoCalc()">Undo Last Calculation</button>
+    <p id="out"></p>
+</div>
+
+<!-- Linked List Tips Box -->
+<div class="tips-box">
+  <h3>Measurement Tips</h3>
+  <p id="tipContent"></p>
+  <button onclick="nextTip()">Next Tip</button>
+</div>
+
+<!-- Recent Calculations Queue -->
+<div class="recent-calc">
+  <h3>Recent Calculations</h3>
+  <ul id="calcList"></ul>
+</div>
+
+<script>
+// ---------------------
+// Prefix Evaluation Calculator
+// ---------------------
+function prefixEval(expr) {
+  let s = expr.split(" ").reverse(), st = [];
+  for (let x of s) {
+    if (!isNaN(x)) st.push(Number(x));
+    else {
+      let a = st.pop(), b = st.pop();
+      st.push(x=="+"?a+b:x=="-"?a-b:x=="*"?a*b:a/b);
+    }
+  }
+  return st[0];
+}
+
+// ---------------------
+// Stack for Undo
+// ---------------------
+let calcStack = [];
+
+// ---------------------
+// Queue for Recent Calculations
+// ---------------------
+class Queue {
+  constructor(size) {
+    this.items = [];
+    this.size = size || 5;
+  }
+  enqueue(item) {
+    if(this.items.length >= this.size) this.items.shift();
+    this.items.push(item);
+  }
+  getAll() { return this.items; }
+}
+const recentCalc = new Queue(5);
+
+// ---------------------
+// Linked List for Tips
+// ---------------------
+class TipNode {
+  constructor(tip) {
+    this.tip = tip;
+    this.next = null;
+  }
+}
+
+class TipList {
+  constructor() { this.head = null; }
+  addTip(tip) {
+    const node = new TipNode(tip);
+    if(!this.head) this.head = node;
+    else {
+      let current = this.head;
+      while(current.next) current = current.next;
+      current.next = node;
+    }
+  }
+}
+
+const tips = new TipList();
+tips.addTip("Measure around the waist at the narrowest point.");
+tips.addTip("Keep the measuring tape snug but not tight.");
+tips.addTip("Measure hips at the widest point.");
+tips.addTip("Stand straight while taking measurements.");
+tips.addTip("Measure bust at the fullest point.");
+tips.addTip("Always use a soft measuring tape.");
+
+// Make it circular
+let lastNode = tips.head;
+while(lastNode.next) lastNode = lastNode.next;
+lastNode.next = tips.head;
+
+let currentTip = tips.head;
+function renderTip() { document.getElementById("tipContent").innerText = currentTip.tip; }
+function nextTip() { currentTip = currentTip.next; renderTip(); }
+renderTip();
+
+// ---------------------
+// Calculation Function
+// ---------------------
+function calc() {
+  let a = m1.value || 0, 
+      b = m2.value || 0, 
+      c = m3.value || 0;
+
+  let totalWaistHip = prefixEval("+ " + a + " " + b);
+  let bustMinusWaist = prefixEval("- " + c + " " + a);
+  let hipTimesTwo = prefixEval("* " + b + " 2");
+
+  let resultText =
+    "Total of Waist and Hip sizes: " + totalWaistHip + "<br>" +
+    "Difference between Bust and Waist: " + bustMinusWaist + "<br>" +
+    "Twice the Hip size: " + hipTimesTwo;
+
+  out.innerHTML = resultText;
+
+  // Push to stack
+  calcStack.push(resultText);
+
+  // Add to recent calculations queue
+  recentCalc.enqueue(`Waist+Hip: ${totalWaistHip}, Bust-Waist: ${bustMinusWaist}, Hip*2: ${hipTimesTwo}`);
+  document.getElementById("calcList").innerHTML = recentCalc.getAll().map(x=>`<li>${x}</li>`).join('');
+}
+
+// ---------------------
+// Undo last calculation
+// ---------------------
+function undoCalc() {
+  if(calcStack.length > 1) {
+    calcStack.pop();
+    out.innerHTML = calcStack[calcStack.length-1];
+  } else if(calcStack.length === 1) {
+    calcStack.pop();
+    out.innerHTML = '';
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ENG">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+<header class="main-header">
+  <div>
+    <img src="logo.png" alt="Logo" class="logo">
+  </div>
+  <div class="header-right">
+    <a href="mainpage.html"><button class="header-button">HOME</button></a>
+    <a href="AboutUs.html"><button class="header-button">ABOUT-US</button></a>
+  </div>
+</header>
+
+<div class="Login-container">
+  <h1>LOGIN</h1>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <a href="forgetpwd.html">Forget Password</a>
+    <button type="submit">LOG-IN</button>
+  </form>
+</div>
+
+<script>
+// Handle login
+document.getElementById('loginForm').onsubmit = function(e){
+  e.preventDefault();
+  const username = this.username.value;
+  const password = this.password.value;
+
+  // Fetch stored users
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if(user){
+    localStorage.setItem('currentUser', JSON.stringify(user)); // store logged-in user
+    window.location.href = 'userdash.html'; // redirect
+  } else {
+    alert('Invalid username or password!');
+  }
+}
+</script>
+
+</body>
+</html>
